@@ -11,9 +11,10 @@
 		3B0A29932367360200A10FF4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B0A29922367360200A10FF4 /* SceneDelegate.swift */; };
 		3B0A29952367360200A10FF4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B0A29942367360200A10FF4 /* ViewController.swift */; };
 		3B0A29982367360200A10FF4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3B0A29962367360200A10FF4 /* Main.storyboard */; };
-		3B0A299B2367360200A10FF4 /* SurprizeMeTestTask.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3B0A29992367360200A10FF4 /* SurprizeMeTestTask.xcdatamodeld */; };
 		3B0A299D2367360700A10FF4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3B0A299C2367360700A10FF4 /* Assets.xcassets */; };
 		3B0A29A02367360700A10FF4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3B0A299E2367360700A10FF4 /* LaunchScreen.storyboard */; };
+		3B0A29AD2367625800A10FF4 /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B0A29AC2367625800A10FF4 /* UserData.swift */; };
+		3B0A29AF23683BE400A10FF4 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B0A29AE23683BE400A10FF4 /* SettingsViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,10 +23,11 @@
 		3B0A29922367360200A10FF4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		3B0A29942367360200A10FF4 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		3B0A29972367360200A10FF4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		3B0A299A2367360200A10FF4 /* SurprizeMeTestTask.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SurprizeMeTestTask.xcdatamodel; sourceTree = "<group>"; };
 		3B0A299C2367360700A10FF4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3B0A299F2367360700A10FF4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3B0A29A12367360700A10FF4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3B0A29AC2367625800A10FF4 /* UserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
+		3B0A29AE23683BE400A10FF4 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,13 +63,22 @@
 				3B0A29902367360200A10FF4 /* AppDelegate.swift */,
 				3B0A29922367360200A10FF4 /* SceneDelegate.swift */,
 				3B0A29942367360200A10FF4 /* ViewController.swift */,
+				3B0A29AE23683BE400A10FF4 /* SettingsViewController.swift */,
+				3B0A29A9236746B600A10FF4 /* Model */,
 				3B0A29962367360200A10FF4 /* Main.storyboard */,
 				3B0A299C2367360700A10FF4 /* Assets.xcassets */,
 				3B0A299E2367360700A10FF4 /* LaunchScreen.storyboard */,
 				3B0A29A12367360700A10FF4 /* Info.plist */,
-				3B0A29992367360200A10FF4 /* SurprizeMeTestTask.xcdatamodeld */,
 			);
 			path = SurprizeMeTestTask;
+			sourceTree = "<group>";
+		};
+		3B0A29A9236746B600A10FF4 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				3B0A29AC2367625800A10FF4 /* UserData.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -141,10 +152,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3B0A299B2367360200A10FF4 /* SurprizeMeTestTask.xcdatamodeld in Sources */,
 				3B0A29952367360200A10FF4 /* ViewController.swift in Sources */,
 				3B0A29912367360200A10FF4 /* AppDelegate.swift in Sources */,
+				3B0A29AD2367625800A10FF4 /* UserData.swift in Sources */,
 				3B0A29932367360200A10FF4 /* SceneDelegate.swift in Sources */,
+				3B0A29AF23683BE400A10FF4 /* SettingsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -298,7 +310,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = MacBook.SurprizeMeTestTask;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -316,7 +328,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = MacBook.SurprizeMeTestTask;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -342,19 +354,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCVersionGroup section */
-		3B0A29992367360200A10FF4 /* SurprizeMeTestTask.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				3B0A299A2367360200A10FF4 /* SurprizeMeTestTask.xcdatamodel */,
-			);
-			currentVersion = 3B0A299A2367360200A10FF4 /* SurprizeMeTestTask.xcdatamodel */;
-			path = SurprizeMeTestTask.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
 	};
 	rootObject = 3B0A29852367360200A10FF4 /* Project object */;
 }
