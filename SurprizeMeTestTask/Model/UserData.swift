@@ -28,7 +28,7 @@ struct UserData : Codable {
         let locale: String
         let createdAt: Int
         let favoriteProducts: [Int]
-        let isHijacked: Bool
+        let isHijacked: Bool?
         let client : Client
         
         struct Client : Codable {
