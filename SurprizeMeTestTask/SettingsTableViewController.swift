@@ -11,16 +11,10 @@ import CoreLocation
 
 class SettingsTableViewController: UITableViewController {
 
+    //MARK: - Variables
     var viewController: ViewController?
     var userData: UserData?
-    let locationManager = CLLocationManager()
-    
-    @IBOutlet weak var englishButton: UIButton!
-    @IBOutlet weak var russianButton: UIButton!
-    @IBOutlet weak var locationSwitch: UISwitch!
-    @IBOutlet weak var changeNameButton: UIButton!
-    @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var emailLabel: UILabel!
+    var firstSwitch: Bool = true
     
     var locationAllowed: Bool {
         set{
@@ -28,8 +22,8 @@ class SettingsTableViewController: UITableViewController {
             UserDefaults.standard.synchronize()
         }
         get{
-            if let newLocationAllowed = UserDefaults.standard.bool(forKey: "locationAllowed") as? Bool?{
-                return newLocationAllowed!
+            if let newLocationAllowed = UserDefaults.standard.value(forKey: "locationAllowed") as? Bool? {
+                return newLocationAllowed ?? false
             } else {
                 return false
             }
@@ -41,8 +35,8 @@ class SettingsTableViewController: UITableViewController {
             UserDefaults.standard.synchronize()
         }
         get{
-            if let newEnChosen = UserDefaults.standard.bool(forKey: "enChosen") as? Bool?{
-                return newEnChosen!
+            if let newEnChosen = UserDefaults.standard.value(forKey: "enChosen") as? Bool?{
+                return newEnChosen ?? false
             } else {
                 return false
             }
@@ -54,48 +48,32 @@ class SettingsTableViewController: UITableViewController {
             UserDefaults.standard.synchronize()
         }
         get{
-            if let newRuChosen = UserDefaults.standard.bool(forKey: "ruChosen") as? Bool?{
-                return newRuChosen!
+            if let newRuChosen = UserDefaults.standard.value(forKey: "ruChosen") as? Bool?{
+                return newRuChosen ?? false
             } else {
                 return false
             }
         }
     }
     
-    @IBAction func locationSwitch(_ sender: Any) {
-        
-        if (!locationAllowed) {
-            
-                //self.locationAllowed = !self.locationAllowed
-                
-                // Ask for Authorisation from the User.
-                self.locationManager.requestAlwaysAuthorization()
-                
-                // For use in foreground
-                self.locationManager.requestWhenInUseAuthorization()
-                
-                if CLLocationManager.locationServicesEnabled() {
-                    //self.locationManager.delegate = self as? CLLocationManagerDelegate
-                    //self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-                    //self.locationManager.startUpdatingLocation()
-                    locationAllowed = true
-                } else {
-                    locationSwitch.isOn = false
-                    locationAllowed = false
-                }
-           
-        } else {
-            locationAllowed = false
-            locationManager.stopUpdatingLocation()
-        }
-                
-        //locationAllowed = !locationAllowed
-    }
+    //MARK: - Constants
+    let locationManager = CLLocationManager()
     
+    //MARK: - Outlets
+    @IBOutlet weak var englishButton: UIButton!
+    @IBOutlet weak var russianButton: UIButton!
+    @IBOutlet weak var locationSwitch: UISwitch!
+    @IBOutlet weak var changeNameButton: UIButton!
+    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var emailLabel: UILabel!
+    @IBOutlet weak var locationNotification: UILabel!
+    @IBOutlet weak var locationDisable: UILabel!
+    
+
+    //MARK: - Functions
     override func viewDidLoad() {
         super.viewDidLoad()
         
-
         tableView.allowsSelection = false
         
         englishButton.layer.cornerRadius = 20
@@ -110,14 +88,76 @@ class SettingsTableViewController: UITableViewController {
         
         self.nameLabel.text = userData?.data.firstName
         self.emailLabel.text = userData?.data.email
-       
+            
+        self.locationManager.requestAlwaysAuthorization()
+        self.locationManager.requestWhenInUseAuthorization()
+        
+        if locationAllowed {
+            locationManager.startUpdatingLocation()
+            locationSwitch.isOn = true
+            locationDisable.text = "Location is enabled"
+            locationAllowed = false
+        } else {
+            locationManager.stopUpdatingLocation()
+            locationSwitch.isOn = false
+            locationDisable.text = "Location is disabled"
+            locationAllowed = true
+        }
     }
     
+    @IBAction func locationSwitch(_ sender: Any) {
+        
+        if !firstSwitch {
+            if !locationAllowed {
+                locationManager.startUpdatingLocation()
+                locationDisable.text = "Location is enabled"
+            } else {
+                locationManager.stopUpdatingLocation()
+                locationDisable.text = "Location is disabled"
+            }
 
+            locationAllowed = !locationAllowed
+        }
+        
+        if firstSwitch {
+            
+            if CLLocationManager.locationServicesEnabled() {
+                switch(CLLocationManager.authorizationStatus()) {
+                case .notDetermined, .restricted, .denied:
+                    self.locationAllowed = false
+                    self.locationSwitch.isOn = false
+                    self.locationSwitch.isEnabled = false
+                    self.locationDisable.text = "Location is disabled"
+                    self.locationNotification.text = "Check phone's setting to give access for your location"
+                case .authorizedAlways, .authorizedWhenInUse:
+                    
+                    if !locationAllowed {
+                        self.locationManager.stopUpdatingLocation()
+                        self.locationAllowed = false
+                        self.locationSwitch.isOn = false
+                        self.locationDisable.text = "Location is disabled"
+                    } else {
+                        self.locationManager.delegate = self as? CLLocationManagerDelegate
+                        self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+                        self.locationManager.startUpdatingLocation()
+                        self.locationAllowed = true
+                        self.locationSwitch.isOn = true
+                        self.locationDisable.text = "Location is enabled"
+                    }
+                    self.locationNotification.text = ""
+                @unknown default:
+                    fatalError()
+                }
+                firstSwitch = false
+            } else {
+                print("Location services are disabled")
+            }
+        }
+    }
     
-
     @IBAction func englishButtonPush(_ sender: Any) {
-            if !enChosen && !ruChosen {
+            
+        if !enChosen && !ruChosen {
                 enChosen = true
                 englishButton.backgroundColor = UIColor.lightGray
             }
@@ -129,59 +169,42 @@ class SettingsTableViewController: UITableViewController {
             }
         }
         
-        @IBAction func russianButtonPush(_ sender: Any) {
-            if !enChosen && !ruChosen {
-                russianButton.backgroundColor = UIColor.lightGray
-                ruChosen = true
-            }
-            if !ruChosen {
-                russianButton.backgroundColor = UIColor.lightGray
-                englishButton.backgroundColor = UIColor.white
-                ruChosen = !ruChosen
-                enChosen = !enChosen
-            }
-        }
+    @IBAction func russianButtonPush(_ sender: Any) {
         
-    @IBAction func checkUserName(_ sender: Any) {
-        print(self.viewController?.userData?.data.firstName)
+        if !enChosen && !ruChosen {
+            russianButton.backgroundColor = UIColor.lightGray
+            ruChosen = true
+        }
+        if !ruChosen {
+            russianButton.backgroundColor = UIColor.lightGray
+            englishButton.backgroundColor = UIColor.white
+            ruChosen = !ruChosen
+            enChosen = !enChosen
+        }
     }
     
-        @IBAction func changeNamePush(_ sender: Any) {
-            
-            let alertController = UIAlertController(title: "Change name", message: nil, preferredStyle: .alert)
-            
-            alertController.addTextField { (textField) in
-                textField.placeholder = "New name"
-            }
-            
-            
-            let changeNameAction = UIAlertAction(title: "Done", style: .default)
-            {
-                (alert) in
-                if (alertController.textFields![0].text! != "") {
-                    
-                    self.postName(alertController.textFields![0].text!)
-//                    DispatchQueue.main.async {
-//                        self.viewController?.fetchData()
-//                        print(self.viewController?.userData?.data.firstName)
-//                        self.userData = self.viewController?.userData
-//                        self.nameLabel.text = self.userData?.data.firstName
-//                    }
-                    
-                    
-                }
-            
-            }
-                
-            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (alert) in }
-            alertController.addAction(changeNameAction)
-            alertController.addAction(cancelAction)
-            
-            present(alertController, animated: true, completion: nil)
-            
-            
-            
+    @IBAction func changeNamePush(_ sender: Any) {
+        
+        let alertController = UIAlertController(title: "Change name", message: nil, preferredStyle: .alert)
+        
+        alertController.addTextField { (textField) in
+            textField.placeholder = "New name"
         }
+        
+        let changeNameAction = UIAlertAction(title: "Done", style: .default)
+        {
+            (alert) in
+            if (alertController.textFields![0].text! != "") {
+                self.postName(alertController.textFields![0].text!)
+            }
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (alert) in }
+        
+        alertController.addAction(changeNameAction)
+        alertController.addAction(cancelAction)
+        
+        present(alertController, animated: true, completion: nil)
+    }
         
     func postName(_ newName: String) {
         guard let url = URL(string: "https://app.surprizeme.ru/api/profile/name/") else { return }
@@ -202,7 +225,7 @@ class SettingsTableViewController: UITableViewController {
         session.dataTask(with: request) { (data, response, error) in
             guard let data = data else { return }
             
-            //Setting new labels's fields to new name value
+            //Setting new name value for labels's fields
             do{
                 
                 let decoder = JSONDecoder()

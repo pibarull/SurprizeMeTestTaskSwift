@@ -11,12 +11,10 @@ import UIKit
 class AboutViewController: UIViewController {
 
     override func viewDidLoad() {
-        super.viewDidLoad()
         
+        super.viewDidLoad()
         view.setGradientBackground(colorOne: .blue, colorTwo: .purple)
-        // Do any additional setup after loading the view.
     }
-    
 
     /*
     // MARK: - Navigation
